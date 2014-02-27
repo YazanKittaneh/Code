@@ -1,0 +1,97 @@
+#lang racket
+(require gigls/unsafe)
+
+
+; +-----------------+-----------------------------------------------------------
+; | Color Utilities |
+; +-----------------+
+
+;;; Procedure:
+;;;   rgb-brightness
+;;; Parameters:
+;;;   color, an RGB color
+;;; Purpose:
+;;;   Computes the brightness of color on a 0 (dark) to 100 (light) scale.
+;;; Produces:
+;;;   b, an integer
+;;; Preconditions:
+;;;   color is a valid RGB color.  That is, each component is between
+;;;     0 and 255, inclusive.
+;;; Postconditions:
+;;;   If color1 is likely to be perceived as lighter than color2,
+;;;     then (brightness color1) > (brightness color2).
+;;;   0 <= b <= 100
+(define rgb-brightness
+  (lambda (color)
+    (round (* 100 (/ (+ (* 0.30 (rgb-red color))
+                        (* 0.59 (rgb-green color))
+                        (* 0.11 (rgb-blue color)))
+                      255)))))
+
+;;; Procedure:
+;;;   rgb-brighter
+;;; Parameters:
+;;;   color1, an RGB color.
+;;;   color2, an RGB color.
+;;; Purpose:
+;;;   Find the brighter of color1 and color2.
+;;; Produces:
+;;;   brighter, an RGB color.
+;;; Preconditions:
+;;;   [No additional]
+;;; Postconditions:
+;;;   brighter is either color1 or color2
+;;;   (rgb-brightness brighter) >= (rgb-brightness color1)
+;;;   (rgb-brightness brighter) >= (rgb-brightness color2)
+(define rgb-brighter
+  (lambda (color1 color2)
+    (if (>= (rgb-brightness color1) (rgb-brightness color2))
+        color1
+        color2)))
+
+;;; Procedure:
+;;;   rgb-bright?
+;;; Parameters:
+;;;   color, an RGB color
+;;; Purpose:
+;;;   Determines whether the color is bright.
+;;; Produces:
+;;;   bright?, a boolean
+;;; Preconditions:
+;;;   color is a valid RGB color.  That is, each component is between
+;;;     0 and 255, inclusive.
+;;;   rgb-brightness is defined.
+;;; Postconditions:
+;;;   bright? is true iff (rgb-brightness color) >= 67.
+(define rgb-bright?
+  (lambda (color)
+    (<= 67 (rgb-brightness color))))
+
+; +-------------+---------------------------------------------------------------
+; | Some Colors |
+; +-------------+
+
+(define my-color-names 
+  (list "palevioletred" "cadetblue" "darkseagreen" "goldenrod"
+        "hotpink" "lightsteelblue" "burlywood" "mistyrose"
+        "salmon" "peru" "plum" "turquoise"))
+(define my-colors
+  (map color-name->rgb my-color-names))
+
+(define green-names
+  (list "darkgreen" "darkolivegreen" "darkseagreen" "forestgreen"
+        "green" "greenyellow" "lawngreen" "lightgreen" "lightseagreen"
+        "limegreen" "mediumseagreen" "mediumspringgreen" "palegreen"
+        "seagreen" "springgreen" "yellowgreen"))
+
+(define greens (map color->rgb green-names))
+
+(define greys-4
+  (map (lambda (n) (rgb-new (* 64 n) (* 64 n) (* 64 n)))
+       (list 4 3 2 1)))
+(define greys-8
+  (map (lambda (n) (rgb-new (* 32 n) (* 32 n) (* 32 n)))
+       (list 8 7 6 5 4 3 2 1)))
+(define greys-16
+  (map (lambda (n) (rgb-new (* 16 n) (* 16 n) (* 16 n)))
+       (list 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1)))

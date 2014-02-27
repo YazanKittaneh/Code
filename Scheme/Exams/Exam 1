@@ -1,0 +1,26 @@
+#lang racket
+(require gigls/unsafe)
+;;; Procedure:
+;;;   gcd
+;;; Parameters:
+;;;   x, a positive integer
+;;;   y, a positive integer
+;;; Purpose:
+;;;   Compute the gcd of x and y (whatever that is)
+;;; Produces:
+;;;   divisor, a positive integer
+;;; Preconditions:
+;;;   [No additional]
+;;; Postconditions:
+;;;   divisor divides x.  That is, (remainder x divisor) is 0
+;;;   divisor divides y.  That is, (remainder y divisor) is 0
+
+
+(define fair-rating 
+  (lambda (one two three four five six seven)
+    (/
+     (- (+ one two three four five six seven)
+      (max one two three four five six seven)
+      (min one two three four five six seven))
+     5)
+    ))

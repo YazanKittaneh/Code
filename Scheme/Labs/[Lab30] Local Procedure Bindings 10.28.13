@@ -1,0 +1,117 @@
+#lang racket
+(require gigls/unsafe)
+; +-----------------+-----------------------------------------------------------
+; | Color Utilities |
+; +-----------------+
+
+;;; Procedure:
+;;;   rgb-brightness
+;;; Parameters:
+;;;   color, an RGB color
+;;; Purpose:
+;;;   Computes the brightness of color on a 0 (dark) to 100 (light) scale.
+;;; Produces:
+;;;   b, an integer
+;;; Preconditions:
+;;;   color is a valid RGB color.  That is, each component is between
+;;;     0 and 255, inclusive.
+;;; Postconditions:
+;;;   If color1 is likely to be perceived as lighter than color2,
+;;;     then (brightness color1) > (brightness color2).
+;;;   0 <= b <= 100
+(define rgb-brightness
+  (lambda (color)
+    (round (* 100 (/ (+ (* 0.30 (rgb-red color))
+                        (* 0.59 (rgb-green color))
+                        (* 0.11 (rgb-blue color)))
+                     255)))))
+
+;;; Procedure:
+;;;   rgb-bright?
+;;; Parameters:
+;;;   color, an RGB color
+;;; Purpose:
+;;;   Determines whether the color is bright.
+;;; Produces:
+;;;   bright?, a boolean
+;;; Preconditions:
+;;;   color is a valid RGB color.  That is, each component is between
+;;;     0 and 255, inclusive.
+;;;   rgb-brightness is defined.
+;;; Postconditions:
+;;;   bright? is true iff (rgb-brightness color) >= 67.
+(define rgb-bright?
+  (lambda (color)
+    (<= 67 (rgb-brightness color))))
+
+;;; Procedure:
+;;;   rgb-dark?
+;;; Parameters:
+;;;   color, an RGB color
+;;; Purpose:
+;;;   Determine if the color appears dark.
+;;; Produces:
+;;;   dark?, a Boolean
+;;; Preconditions:
+;;;   [No additional]
+;;; Postconditions:
+;;;   If color is relatively dark, then dark? is #t.
+;;;   Otherwise, dark? is #f.
+(define rgb-dark?
+  (lambda (color)
+    (> 33 (rgb-brightness color))))
+
+;; Procedure:
+;;;   rgb-brighter?
+;;; Parameters:
+;;;   color1, a color
+;;;   color2, a color
+;;; Purpose:
+;;;   Determine if color1 is strictly brighter than color 2.
+;;; Produces:
+;;;   brighter?, a Boolean
+;;; Preconditions:
+;;;   [No additional preconditions.]
+;;; Postconditions:
+;;;   If (rgb-brightness color1) > (rgb-brightness color2)
+;;;     then brighter is true (#t)
+;;;   Otherwise
+;;;     brighter is false (#f)
+(define rgb-brighter?
+  (lambda (color1 color2)
+    (> (rgb-brightness color1) (rgb-brightness color2))))
+
+;;;   Exercise 1
+;a.
+
+(define rgb-brightest
+  (lambda (colors)
+    (letrec ([rgb-brightest-helper
+              (lambda (brightest-so-far remaining-colors)
+                (cond
+                  [(null? remaining-colors)
+                   brightest-so-far]
+                  [(rgb-brighter? (car remaining-colors) brightest-so-far)
+                   (rgb-brightest-helper (car remaining-colors) (cdr remaining-colors))]
+                  [else
+                   (rgb-brightest-helper brightest-so-far (cdr remaining-colors))]))]
+             [check-color
+              (lambda (colors)
+              (not (rgb? (car colors)))])
+      (cond [(null? colors)
+            ("You're doing it wrong")]
+            [(check-color (car colors)))
+            ("Yuh dun goofed")]
+            [(check-color (
+            [else (rgb-brightest-helper (car colors) (cdr colors))]))))
+;(define rgb-brightest-helper
+; (lambda (brightest-so-far remaining-colors)
+;  (cond
+;   [(null? remaining-colors)
+;   brightest-so-far]
+; [(rgb-brighter? (car remaining-colors) brightest-so-far)
+; (rgb-brightest-helper (car remaining-colors) (cdr remaining-colors))]
+;[else
+;(rgb-brightest-helper brightest-so-far (cdr remaining-colors))])))
+
+;;;   Exercise 2

@@ -1,0 +1,28 @@
+#lang racket
+(require gigls/unsafe)
+(define canvas
+    (image-new 4 3)
+  )
+(image-show canvas)
+
+(define fave1 (color-name->rgb "moccasin"))
+(define fave2 (color-name->rgb "sienna"))
+(define fave3 (color-name->rgb "peru"))
+
+(image-set-pixel! canvas 0 1 (rgb-lighter fave1))
+(image-set-pixel! canvas 1 1  fave1)
+(image-set-pixel! canvas 2 1 (rgb-darker fave1))
+(image-set-pixel! canvas 0 0  fave1)
+
+(image-set-pixel! canvas 0 0 
+                  (rgb-darker (image-get-pixel canvas 0 0)))
+(image-transform-pixel! canvas 1 1 rgb-darker)
+
+(define c0 (rgb-new 64 128 196))
+(define c1 (rgb-new 32 96 255))
+(define c2 (rgb-new 240 0 127))
+
+
+
+(image-refresh-display! canvas)
+

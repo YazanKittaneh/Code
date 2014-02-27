@@ -1,0 +1,20 @@
+#lang racket
+(require gigls/unsafe)
+
+(context-set-bgcolor! "black")
+(define landscape (image-show 
+                   (image-new 9 5)))
+
+(context-set-bgcolor! "yellow")
+(define portrait (image-show
+                  (image-new 5 7)))
+(image-set-pixel! landscape 0 0 (rgb-new 255 0 0))
+(image-set-pixel! portrait 0 0 (rgb-new 255 0 0))
+(image-set-pixel! landscape 8 4 (rgb-new 0 0 255))
+(image-set-pixel! portrait 4 6 (rgb-new 0 0 255))
+
+(define self-portrait (image-show
+                        (image-load "/home/kittaneh17/Desktop/me.jpg")))
+
+(image-refresh-display! portrait)
+(image-refresh-display! landscape)

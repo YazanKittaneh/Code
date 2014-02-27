@@ -1,0 +1,40 @@
+#lang racket
+(require gigls/unsafe)
+
+(define rgb-light?
+  (lambda (color)
+    (<= 192 (+ (* 0.30 (rgb-red color)) (* 0.59 (rgb-green color)) (* 0.11 (rgb-blue color))))))
+
+(define rgb-dark?
+  (lambda (color)
+    (>= 64 (+ (* 0.30 (rgb-red color)) (* 0.59 (rgb-green color)) (* 0.11 (rgb-blue color))))))
+(define not-very-blue?
+  (lambda (color)
+    (>= 64  (rgb-blue color))))
+
+(define red-dominates?
+  (lambda (color)
+    (>= (rgb-red color)  (+ (rgb-green color) (rgb-blue color)))))
+
+(define greyish?
+  (lambda (color)
+    (and
+     (>= 8 (abs (- (rgb-red color) (rgb-green color))))
+     (>= 8  (abs (- (rgb-green color) (rgb-blue color))))
+     (>= 8  (abs (- (rgb-red color) (rgb-blue color))))
+     )))
+
+(define rgb-greener?
+  (lambda (color1 color2)
+    (>= (rgb-green color1) (rgb-green color2))))
+
+(define rgb-lighter?
+  (lambda (color1 color2)
+    (>= (+ (* 0.30 (rgb-red color1)) (* 0.59 (rgb-green color1)) 
+            (* 0.11 (rgb-blue color1)))
+        (+ (* 0.30 (rgb-red color2)) (* 0.59 (rgb-green color2)) 
+            (* 0.11 (rgb-blue color2)))
+        )))
+(define valid-component?
+  (lambda (comp)
+    (and (>= 255 comp 0))))

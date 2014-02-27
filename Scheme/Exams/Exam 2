@@ -1,0 +1,137 @@
+#lang racket
+(require gigls/unsafe)
+
+;Time:
+;      7:00 - 
+
+
+;_____________________________________________________________
+;;;Problem1 [Done]
+
+(define rgb-min-blend 
+  (lambda (color1 color2)
+    (rgb-new (min (rgb-red color1) (rgb-red color2))
+             (min (rgb-green color1) (rgb-green color2))
+             (min (rgb-blue color1) (rgb-blue color2)))))
+
+
+;_____________________________________________________________
+;;;Problem2 [Incomplete] let/red-weight isn't working
+
+(define rgb-greyer
+  (lambda (color weight)
+    (rgb-new (+ (* (- 1 weight) (rgb-red color))
+                (* weight
+                   (+ (* 0.30 (rgb-red color))
+                      (* 0.59 (rgb-green color))
+                      (* 0.11 (rgb-blue color)))))
+             (+ (* (- 1 weight) (rgb-green color)) 
+                (* weight
+                 (+ (* 0.30 (rgb-red color))
+                    (* 0.59 (rgb-green color))
+                    (* 0.11 (rgb-blue color)))))
+             (+ (* (- 1 weight) (rgb-blue color))
+                (* weight
+                   (+ (* 0.30 (rgb-red color))
+                      (* 0.59 (rgb-green color))
+                      (* 0.11 (rgb-blue color))))))))
+
+(define rgb-grayer
+  (lambda (color weight)
+    (let (
+      [red  (* 0.30 (rgb-red color))]
+      [blue (* 0.59 (rgb-green color))]
+      [green (* 0.11 (rgb-blue color))]
+      [red-weight (* (- 1 weight) (rgb-red color))]
+      [green-weight (* (- 1 weight) (rgb-green color))]
+      [blue-weight (* (- 1 weight) (rgb-blue color))])
+      (rgb-new (+ (red-weight color)
+                  (* weight
+                     (+ (red color)
+                        (green color)
+                        (blue color))))
+                     (+ (green-weight color)
+                        (* weight
+                           (+ (red color)
+                              (green color)
+                              (blue color))))
+                           (+ (blue-weight color)
+                              (* weight
+                                 (+ (red color)
+                                    (green color)
+                                    (blue color))))))))
+
+       
+
+;_____________________________________________________________
+;;;Problem3 
+
+
+
+
+
+;_____________________________________________________________
+;;;Problem4   [incomplete] giving me turtle error
+
+(define world (image-show (image-new 300 50)))
+(define tia (turtle-new world))
+(turtle-teleport! tia 10 10)
+
+(define turtle-square!
+  (lambda (turtle side-length)
+    (repeat 4 (lambda () 
+                (turtle-forward! turtle side-length)
+                (turtle-turn! turtle 90)))))
+
+;(define turtle-square-sequence! 
+; (lambda (turtle copies side-length spacing)
+;   (repeat copies
+;    ((turtle-down! turtle)
+;     (repeat 4 (lambda () 
+;                (turtle-forward! turtle side-length)
+;                (turtle-turn! turtle 90)))
+;     (turtle-up! turtle)
+;   (turtle-forward! turtle (+ side-length spacing))))))
+
+
+
+
+;_____________________________________________________________
+;;;Problem5
+
+
+;_____________________________________________________________
+;;;Problem6
+
+;(define rac 
+;  (lambda (lst remaining)
+;    (rac-helper remaining list)))
+;
+;(define rac-helper
+;  (lambda (lst so-far)
+;    (if (null? lst)
+;        so-far
+;        
+
+
+;_____________________________________________________________
+;;;Problem7
+
+
+
+;_____________________________________________________________
+;;;Problem8
+        
+        
+(define increasing?
+  (lambda (lst)
+    (and 
+     (< (car lst) (car (cdr lst))) 
+     (increasing? (cdr lst) )
+     (null? lst))))
+
+;_____________________________________________________________
+;;;Problem9
+
+;_____________________________________________________________
+;;;Problem10
